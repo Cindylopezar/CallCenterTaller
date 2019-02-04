@@ -11,43 +11,89 @@ import java.util.List;
 import com.callcenter.util.Call;
 import com.callcenter.util.Employees;
 
+/**
+ * Dispatcher.
+ *
+ * @author Cindy Sarahi Lopez Argueta <mailto:csargueta@stefanini.com />
+ * @version 
+ * @see 
+ * @since 02-04-2019 10:49:22 AM 2019
+ */
 public class Dispatcher extends Thread {
 
+	/** Attribute that determine call. */
 	Call call;
+	
+	/** Attribute that determine EmployeesGeneral. */
 	List<Employees> EmployeesGeneral;
 
+	/**
+	 * Gets the call.
+	 *
+	 * @return the call
+	 */
 	public Call getCall() {
 		return call;
 	}
 
+	/**
+	 * Sets the call.
+	 *
+	 * @param call the new call
+	 */
 	public void setCall(Call call) {
 		this.call = call;
 	}
 
+	/**
+	 * Gets the employees general.
+	 *
+	 * @return the employees general
+	 */
 	public List<Employees> getEmployeesGeneral() {
 		return EmployeesGeneral;
 	}
 
+	/**
+	 * Sets the employees general.
+	 *
+	 * @param EmployeesGeneral the new employees general
+	 */
 	public void setEmployeesGeneral(List<Employees> EmployeesGeneral) {
 		this.EmployeesGeneral = EmployeesGeneral;
 	}
 
+	/**
+	 * Instantiates a new dispatcher.
+	 *
+	 * @param call the call
+	 * @param EmployeesGeneral the employees general
+	 */
 	public Dispatcher(Call call, List<Employees> EmployeesGeneral) {
 
 		this.call = call;
 		this.EmployeesGeneral = EmployeesGeneral;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() {
 		dispatchCall(this.call, this.EmployeesGeneral);
 	}
 
+	/**
+	 * Dispatch call.
+	 *
+	 * @param call the call
+	 * @param EmployeesGeneral the employees general
+	 */
 	public static void dispatchCall(Call call, List<Employees> EmployeesGeneral) {
 
 		Date date = new Date();
 		int flag = 0;
-		int delayTime = (int) (Math.random() * NumberLimit()) + NumberLimit()-10;
+		int delayTime = (int) (Math.random() * numberLimit()) + numberLimit()-10;
 		
 		delayProcess(delayTime);
 		if (date.before(timerCall(call.getDuration(), (6+(delayTime/1000))))) {
@@ -72,6 +118,13 @@ public class Dispatcher extends Thread {
 		}
 	}
 
+	/**
+	 * Timer call.
+	 *
+	 * @param call the call
+	 * @param time the time
+	 * @return the date
+	 */
 	private static Date timerCall(Date call, int time) {
 		try {
 			Calendar calendar = Calendar.getInstance();
@@ -89,6 +142,13 @@ public class Dispatcher extends Thread {
 		return null;
 	}
 
+	/**
+	 * Processor call.
+	 *
+	 * @param EmployeesType the employees type
+	 * @param Employees the employees
+	 * @return the int
+	 */
 	private static int processorCall(String EmployeesType, List<Employees> Employees) {
 
 		int count = 0;
@@ -109,6 +169,15 @@ public class Dispatcher extends Thread {
 
 	}
 
+	/**
+	 * Process manager.
+	 *
+	 * @param EmployeesType the employees type
+	 * @param Employees the employees
+	 * @param call the call
+	 * @param number the number
+	 * @return the int
+	 */
 	public static int processManager(String EmployeesType, List<Employees> Employees, Call call, int number) {
 		int result = processorCall(EmployeesType, Employees);
 		Date date = new Date();
@@ -121,6 +190,11 @@ public class Dispatcher extends Thread {
 		return result;
 	}
 	
+	/**
+	 * Delay process.
+	 *
+	 * @param time the time
+	 */
 	private static void delayProcess(int time) {
 		try {
 			Thread.sleep(time);
@@ -129,7 +203,12 @@ public class Dispatcher extends Thread {
 		}
 	}
 	
-	private static int NumberLimit() {
+	/**
+	 * Number limit.
+	 *
+	 * @return the int
+	 */
+	private static int numberLimit() {
 		int delayTime = (int) (Math.random() * 1000) + 500;
 		return delayTime;
 	}
