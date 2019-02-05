@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.callcenter.persistence.PersistenceManager;
 import com.callcenter.util.Call;
 import com.callcenter.util.Employees;
 
@@ -69,10 +70,10 @@ public class Dispatcher extends Thread {
 	 * @param call the call
 	 * @param EmployeesGeneral the employees general
 	 */
-	public Dispatcher(Call call, List<Employees> EmployeesGeneral) {
+	public Dispatcher(Call call) {
 
 		this.call = call;
-		this.EmployeesGeneral = EmployeesGeneral;
+
 	}
 
 	/* (non-Javadoc)
@@ -80,16 +81,17 @@ public class Dispatcher extends Thread {
 	 */
 	@Override
 	public void run() {
-		dispatchCall(this.call, this.EmployeesGeneral);
+		dispatchCall(this.call);
 	}
 
+	private static PersistenceManager persistenceManager = new PersistenceManager();
 	/**
 	 * Dispatch call.
 	 *
 	 * @param call the call
 	 * @param EmployeesGeneral the employees general
 	 */
-	public static void dispatchCall(Call call, List<Employees> EmployeesGeneral) {
+	public static void dispatchCall(Call call) {
 
 		Date date = new Date();
 		int flag = 0;
@@ -97,24 +99,26 @@ public class Dispatcher extends Thread {
 		
 		delayProcess(delayTime);
 		if (date.before(timerCall(call.getDuration(), (6+(delayTime/1000))))) {
-			flag = processManager("operator", EmployeesGeneral, call, (6+(delayTime/1000)));
+			flag = processManager("operator", persistenceManager.listEmployees(), call,
+					(6 + (delayTime / 1000)));
 		}
 		date = new Date();
 		delayProcess(delayTime);
 		if (date.before(timerCall(call.getDuration(), (8+(delayTime/1000)))) && flag == 0) {
-			flag = processManager("supervisor", EmployeesGeneral, call, (8+(delayTime/1000)));
+			flag = processManager("supervisor",persistenceManager.listEmployees() , call, (8+(delayTime/1000)));
 		}
 		date = new Date();
 		delayProcess(delayTime);
 		if (date.before(timerCall(call.getDuration(), (10+(delayTime/1000)))) && flag == 0) {
-			flag = processManager("director", EmployeesGeneral, call, (10+(delayTime/1000)));
+			flag = processManager("director", persistenceManager.listEmployees(), call, (10+(delayTime/1000)));
 		}
 
 		if (flag == 0) {
 
-			List<Call> callLost = new ArrayList<Call>();
-			callLost.add(call);
-			System.out.println(callLost.toString());
+			List<Call> missCall = new ArrayList<Call>();
+			missCall.add(call);
+			System.out.println(missCall.toString());
+			persistenceManager.insertMissCall(call);
 		}
 	}
 
@@ -149,15 +153,16 @@ public class Dispatcher extends Thread {
 	 * @param Employees the employees
 	 * @return the int
 	 */
-	private static int processorCall(String EmployeesType, List<Employees> Employees) {
+	private static int processorCall(Call call, String EmployeesType, List<Employees> Employees) {
 
 		int count = 0;
 		for (Employees EmployeesDisponibility : Employees) {
 			if (EmployeesDisponibility.getTypeEmployee().equals(EmployeesType) && EmployeesDisponibility.isdisponibility()) {
-				// logica de llamada
+				Date date = new Date();
+				persistenceManager.insertAnsweredCalls(call, date, EmployeesDisponibility);
+				persistenceManager.modifyDisponibility(EmployeesDisponibility);
 
-				EmployeesDisponibility.setdisponibility(false);
-				System.out.println("LLAMADA CONSTESTADA");
+				System.out.println("LLAMADA ENTRANTE CONTESTADA POR:");
 				System.out.println(EmployeesDisponibility.getTypeEmployee() + ": " + EmployeesDisponibility.getFirstName()
 						+ " " + EmployeesDisponibility.getSecondName());
 
@@ -179,11 +184,11 @@ public class Dispatcher extends Thread {
 	 * @return the int
 	 */
 	public static int processManager(String EmployeesType, List<Employees> Employees, Call call, int number) {
-		int result = processorCall(EmployeesType, Employees);
+		int result = processorCall(call, EmployeesType, Employees);
 		Date date = new Date();
 		if (result == 0) {
 			do {
-				result = processorCall(EmployeesType, Employees);
+				result = processorCall(call,EmployeesType, Employees);
 				date = new Date();
 			} while (date.before(timerCall(call.getDuration(), number)) && result == 0);
 		}

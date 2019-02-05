@@ -40,9 +40,10 @@ public class MissCall {
 	 *
 	 * @param idMissCall the id miss call
 	 */
-	public MissCall(int idMissCall) {
+	public MissCall(Call call, Date dateMissCall) {
 		super();
-		this.idMissCall = idMissCall;
+		this.call = call;
+		this.dateMissCall = dateMissCall;
 	}
 	
 

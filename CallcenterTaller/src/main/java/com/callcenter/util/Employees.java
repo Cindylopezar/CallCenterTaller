@@ -131,7 +131,7 @@ public class Employees {
 	 *
 	 * @return the id
 	 */
-	public int getId() {
+	public int getIdEmployees() {
 		return idEmployees;
 	}
 
@@ -230,7 +230,7 @@ public class Employees {
 	 *
 	 * @param disponibility the new disponibility
 	 */
-	public void setdisponibility(boolean disponibility) {
+	public void setDisponibility(boolean disponibility) {
 		this.disponibility = disponibility;
 	}
 
