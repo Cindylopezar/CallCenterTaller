@@ -9,6 +9,14 @@ import java.util.concurrent.TimeUnit;
 
 import com.callcenter.util.Call;
 
+/**
+ * ManagerThreads.
+ *
+ * @author Cindy Sarahi Lopez Argueta <mailto:csargueta@stefanini.com />
+ * @version 
+ * @see 
+ * @since 02-05-2019 11:40:40 AM 2019
+ */
 public class ManagerThreads extends Thread implements Serializable{
 
 	/** Attribute that determine a Constant of serialVersionUID. */

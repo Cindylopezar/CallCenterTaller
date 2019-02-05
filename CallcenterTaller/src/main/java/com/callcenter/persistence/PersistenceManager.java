@@ -13,7 +13,17 @@ import com.callcenter.controller.MissCall;
 import com.callcenter.util.Call;
 import com.callcenter.util.Employees;
 
+/**
+ * PersistenceManager.
+ *
+ * @author Cindy Sarahi Lopez Argueta <mailto:csargueta@stefanini.com />
+ * @version 
+ * @see 
+ * @since 02-05-2019 11:40:23 AM 2019
+ */
 public class PersistenceManager {
+
+/** Attribute that determine factory. */
 private EntityManagerFactory factory = Persistence.createEntityManagerFactory("callcenter");
 	
 	/** Attribute that determine manager. */
@@ -22,9 +32,9 @@ private EntityManagerFactory factory = Persistence.createEntityManagerFactory("c
 	/**
 	 * Insert calls answered.
 	 *
-	 * @param incomingCalls the incoming calls
+	 * @param call the call
 	 * @param date the date
-	 * @param employee the employee
+	 * @param employees the employees
 	 */
 	public void insertAnsweredCalls(Call call, Date date, Employees employees) {
 
@@ -39,7 +49,7 @@ private EntityManagerFactory factory = Persistence.createEntityManagerFactory("c
 	/**
 	 * Insert incoming calls.
 	 *
-	 * @param incomingCalls the incoming calls
+	 * @param call the call
 	 * @param date the date
 	 */
 	public void insertCall(Call call, Date date) {
@@ -55,7 +65,7 @@ private EntityManagerFactory factory = Persistence.createEntityManagerFactory("c
 	/**
 	 * Insert call lost.
 	 *
-	 * @param incomingCalls the incoming calls
+	 * @param call the call
 	 */
 	public void insertMissCall(Call call) {
 
@@ -83,7 +93,7 @@ private EntityManagerFactory factory = Persistence.createEntityManagerFactory("c
 	/**
 	 * Modify disponibility.
 	 *
-	 * @param employee the employee
+	 * @param employees the employees
 	 */
 	public void modifyDisponibility(Employees employees) {
 
