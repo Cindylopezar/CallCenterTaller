@@ -111,8 +111,9 @@ public class AnsweredCalls {
 	 * @param dateAnsweredCall the date answered call
 	 * @param employees the employees
 	 */
-	public AnsweredCalls(Date dateAnsweredCall, Employees employees) {
+	public AnsweredCalls(Call call, Date dateAnsweredCall, Employees employees) {
 		super();
+		this.call = call;
 		this.dateAnsweredCall = dateAnsweredCall;
 		this.employees = employees;
 	}
@@ -120,7 +121,7 @@ public class AnsweredCalls {
 	/**
 	 * Instantiates a new answered calls.
 	 */
-	public AnsweredCalls() {
+	public AnsweredCalls() { 
 		super();
 	}
 
